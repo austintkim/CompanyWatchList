@@ -32,7 +32,7 @@ In this repo, you'll find 2 deployable services:
 4. Followed by `docker-compose up`
 5. Navigate to http://localhost:8000/docs to see your FastAPI server
 6. (for dev) In VSCode, select your Python Interpreter (CMD+P) to use the poetry created environment:
-   ![alt text](image.png)
+   ![alt text](image-4.png)
 
 You can find the list of environments via: `poetry env list` and the currently active venv for poetry via: `poetry env info`
 
