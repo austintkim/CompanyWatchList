@@ -1,7 +1,7 @@
 import { DataGrid, GridRowSelectionModel } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useSelectedCompanies } from "./SelectedCompaniesContext";
-import { getCollectionsById, ICollection, ICompany, createCompanyCollectionAssociation } from "../utils/jam-api";
+import { getCollectionsById, ICollection, ICompany, createCompanyCollectionAssociation, deleteCompanyCollectionAssociation } from "../utils/jam-api";
 import ProgressBar from './ProgressBar';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -25,6 +25,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
     const [estimatedTime, setEstimatedTime] = useState<string | null>(null);
 
     const targetCollection = collectionResponse.filter(collection => collection.id !== selectedCollectionId);
+    const currentCollection = collectionResponse.filter(collection => collection.id === selectedCollectionId);
 
     const fetchCompanies = async () => {
         const newResponse = await getCollectionsById(selectedCollectionId, offset, pageSize);
@@ -156,7 +157,52 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
         }
     };
 
+    const handleDelete = async () => {
+        setLoading(true);
+        setProgress(0);
+        setErrorMessage(null);
+
+        try {
+            const totalCompaniesToDelete = selectedCompanyIds.length;
+            const chunkSize = 10; // Adjust based on your preference
+            const successfulResults = [];
+
+            for (let i = 0; i < totalCompaniesToDelete; i += chunkSize) {
+                const chunk = selectedCompanyIds.slice(i, i + chunkSize);
+
+                // Delete company associations
+                const results = await deleteCompanyCollectionAssociation(chunk.map(id => ({ company_id: Number(id), collection_id: selectedCollectionId })));
+
+                successfulResults.push(...results);
+                const currentProgress = Math.min(100, Math.floor(((i + chunk.length) / totalCompaniesToDelete) * 100));
+                setProgress(currentProgress);
+            }
+
+            const totalSuccess = successfulResults.every(result => result !== null && result !== undefined);
+
+            if (totalSuccess) {
+                const deletedCount = selectedCompanyIds.length;
+                clearSelectedCompanies();
+                setSuccessMessage(deletedCount === 1
+                    ? '1 company deleted successfully!'
+                    : `${deletedCount} companies deleted successfully!`
+                );
+                await fetchCompanies();
+            } else {
+                setErrorMessage("Some companies could not be deleted.");
+                console.error('Some deletions were not successful:', successfulResults);
+            }
+        } catch (error) {
+            console.error('Error deleting companies:', error);
+            setErrorMessage("An error occurred while deleting companies.");
+        } finally {
+            setLoading(false);
+            setProgress(100);
+        };
+    };
+
     const buttonText = targetCollection.length > 0 ? `Add ${selectedCompanyIds.length} to ${targetCollection[0].collection_name}` : "No target collection";
+    const deleteButtonText = currentCollection.length > 0 ? `Delete ${selectedCompanyIds.length} from ${currentCollection[0].collection_name}` : "No current collection";
 
     const handleCloseSuccessMessage = () => {
         setSuccessMessage(null);
@@ -251,6 +297,18 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
                     disabled={selectedCompanyIds.length === 0}
                 >
                     {buttonText}
+                </button>
+                <button
+                    onClick={handleDelete}
+                    className={`py-2 px-4 text-white font-semibold rounded ${
+                        selectedCompanyIds.length > 0
+                            ? "bg-red-500 hover:bg-red-600"
+                            : "bg-gray-400 cursor-not-allowed opacity-50"
+                    }`}
+                    disabled={selectedCompanyIds.length === 0}
+                >
+                    {deleteButtonText}
+
                 </button>
             </div>
         </div>

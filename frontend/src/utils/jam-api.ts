@@ -88,7 +88,7 @@ export async function createCompanyCollectionAssociation(
     }
 }
 
-export async function deleteBatchCompanyCollectionAssociations(
+export async function deleteCompanyCollectionAssociation(
     payload: ICompanyCollectionAssociationDeleteInput[]
 ): Promise<ICompanyCollectionAssociationOutput[]> {
     try {
