@@ -164,13 +164,12 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
 
         try {
             const totalCompaniesToDelete = selectedCompanyIds.length;
-            const chunkSize = 10; // Adjust based on your preference
+            const chunkSize = 10;
             const successfulResults = [];
 
             for (let i = 0; i < totalCompaniesToDelete; i += chunkSize) {
                 const chunk = selectedCompanyIds.slice(i, i + chunkSize);
 
-                // Delete company associations
                 const results = await deleteCompanyCollectionAssociation(chunk.map(id => ({ company_id: Number(id), collection_id: selectedCollectionId })));
 
                 successfulResults.push(...results);
@@ -294,7 +293,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
                             ? "bg-orange-500 hover:bg-orange-600"
                             : "bg-gray-400 cursor-not-allowed opacity-50"
                     }`}
-                    disabled={selectedCompanyIds.length === 0}
+                    disabled={loading || selectedCompanyIds.length === 0}
                 >
                     {buttonText}
                 </button>
@@ -305,7 +304,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
                             ? "bg-red-500 hover:bg-red-600"
                             : "bg-gray-400 cursor-not-allowed opacity-50"
                     }`}
-                    disabled={selectedCompanyIds.length === 0}
+                    disabled={loading || selectedCompanyIds.length === 0}
                 >
                     {deleteButtonText}
 
