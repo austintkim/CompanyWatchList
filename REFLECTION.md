@@ -1,6 +1,6 @@
 ## High-Level Approach:
 
-- The goal is to add a company from one list to another (and vice versa) by creating a new row in the `company_collection_associations` table, associating the company with the other collection.
+- The goal is to add/delete a company from one list to another (and vice versa) by creating/deleting a row in the `company_collection_associations` table, associating the company with the other collection.
 
 - Backend:
   - A `create` endpoint was added, which uses batch processing, minimal database queries, and bulk inserts.
