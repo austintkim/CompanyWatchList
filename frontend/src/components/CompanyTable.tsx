@@ -289,7 +289,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
                 <button
                     onClick={handleMoveTo}
                     className={`py-2 px-4 text-white font-semibold rounded mr-4 ${
-                        selectedCompanyIds.length > 0
+                        selectedCompanyIds.length > 0 && !loading
                             ? "bg-orange-500 hover:bg-orange-600"
                             : "bg-gray-400 cursor-not-allowed opacity-50"
                     }`}
@@ -300,7 +300,7 @@ const CompanyTable: React.FC<CompanyTableProps> = ({ selectedCollectionId, colle
                 <button
                     onClick={handleDelete}
                     className={`py-2 px-4 text-white font-semibold rounded ${
-                        selectedCompanyIds.length > 0
+                        selectedCompanyIds.length > 0 && !loading
                             ? "bg-red-500 hover:bg-red-600"
                             : "bg-gray-400 cursor-not-allowed opacity-50"
                     }`}
