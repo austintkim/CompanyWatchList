@@ -2,7 +2,7 @@
 
 ## High Level Overview
 
-CompanyWatchList is an application that allows a user to curate two lists of hypothetical companies: "My Companies" and "Liked Companies." The user can add a specific company, group of companies, or all companies from list to another - deletions are possible. A progress bar with an estimated time remaining alert allows for a considerate and smooth user experience when particularly large operations are loading (i.e. all 50,000 companies are moved from one list to another).
+CompanyWatchList is an application that allows a user to curate two lists of hypothetical companies: "My List" and "Liked Companies." The user can add a specific company, group of companies, or all companies from list to another - deletions are possible. A progress bar with an estimated time remaining alert allows for a considerate and smooth user experience when particularly large operations are loading (i.e. all 50,000 companies are moved from one list to another).
 
 ![alt text](image.png)
 ![alt text](image-1.png)
